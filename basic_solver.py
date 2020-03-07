@@ -11,7 +11,7 @@ import sys
 def generate_solns(max_n):
     
     #added fillers so solns[n] gives soln mod n
-    solns = [0, 1]
+    solns = [-1, -1, 1]
 
     #x is our modulus
     for x in range(2, max_n):
