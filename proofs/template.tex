@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage{myStyle}
+\usepackage{titlesec}
+
+
+%packages----------------------------------
+
+%packages----------------------------------
+
+%settings----------------------------------
+
+\parindent0pt
+\titleformat{\section}
+{\normalfont\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}
+{\normalfont\bfseries}{\thesubsection}{1em}{}
+
+%settings----------------------------------
+
+%commands----------------------------------
+
+%commands----------------------------------
+
+%title-------------------------------------
+
+\title{Proofs for Euler Problem 451}
+\author{Kirk Bonney & Beau Horenberger}
+\date{}
+
+%title-------------------------------------
+%
+\begin{document}
+
+\maketitle
+
+\section{Sufficient condition for I(n) = 1}
+
+By Gauss we know that the group $\ZZ / n \ZZ^\times$ is cyclic if and only if $n$ is $1,2,4,p^k,2p^k$ where p is an odd prime and $k>0$. For all other values of $n$ the group is not cyclic. We also know that a cyclic group has a unique group of order $d$ for each $d$ dividing the order. In the case of cyclic $\ZZ / n \ZZ^\times$ , this means that the unique subgroup is $\langle -1 \rangle$. However, the conditions of problem 451 do not include $n-1$, so $I(n)$ must be 1 as a result of the uniqueness of the cyclic subgroup of order 2.
+
+\end{document}

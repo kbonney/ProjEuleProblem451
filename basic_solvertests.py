@@ -30,6 +30,7 @@ def generate_solns(max_n):
             if all(X%p != 0 for p in primes.keys()) and (X*X)%x == 1:
                 if len(primes) == 1:
                     D[str(x) + " P"]=X
+                    break
                 else:
                     D[x]=X
                     break

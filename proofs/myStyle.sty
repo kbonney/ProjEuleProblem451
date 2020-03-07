@@ -1,0 +1,116 @@
+% this is my first package
+% 
+% (c) Kirk Bonney
+%
+
+%Packages%
+\RequirePackage[utf8]{inputenc}
+\RequirePackage{amsfonts}
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{amsthm}
+\RequirePackage[margin=1in]{geometry}
+\RequirePackage{enumitem}
+\RequirePackage[ruled,vlined]{algorithm2e}
+\RequirePackage{mathtools}
+%Packages%
+
+%---------
+
+%Environments%
+
+%Customized Theorem Environments
+
+\newtheoremstyle%
+{custom}%
+{}%                         Space above
+{}%			Space below
+{}%			Body font
+{}%                         Indent amount
+{}%                         Theorem head font
+{.}%                        Punctuation after heading
+{ }%                        Space after heading
+{\thmname{}%                Additional specifications for theorem head
+\thmnumber{}%
+\thmnote{\bfseries #3}}%
+
+\newtheoremstyle%
+{Theorem}%
+{}%
+{}%
+{\itshape}%
+{}%
+{}%
+{.}%
+{ }%
+{\thmname{\bfseries #1}%
+\thmnumber{\;\bfseries #2}%
+\thmnote{\;(\bfseries #3)}}%
+
+
+
+\theoremstyle{Theorem}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{cor}{Corollary}[section]
+\newtheorem*{nonumcor}{Corollary}
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem*{nonumlemma}{Lemma}
+\newtheorem{prop}{Proposition}[section]
+\newtheorem*{nonumthm}{Theorem}
+\newtheorem*{nonumprop}{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem*{answer}{Answer}
+\newtheorem*{nonumdfn}{Definition}
+\newtheorem{ex}{Example}[section]
+\newtheorem*{nonumex}{Example}
+\newtheorem{exercise}{Exercise}[section]
+	\numberwithin{exercise}{subsection}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\newtheorem*{note}{Note}
+\newtheorem*{notation}{Notation}
+\newtheorem*{solution}{Solution}
+\theoremstyle{custom}
+\newtheorem*{cust}{Definition}
+
+\newcommand{\xbox}[2]{\begin{center}\fbox{\parbox{#1\linewidth}{#2}}\end{center}}
+
+%Environments%
+
+%---------
+
+%Commands%
+	%Generic
+	\newcommand{\bbA}{\mathbb A}
+	\newcommand{\CC}{\mathbb C}
+	\newcommand{\FF}{\mathbb F}
+	\newcommand{\HH}{\mathbb H}
+	\newcommand{\II}{\mathbb I}
+	\newcommand{\KK}{\mathbb K}
+	\newcommand{\NN}{\mathbb N}
+	\newcommand{\PP}{\mathbb P}
+	\newcommand{\QQ}{\mathbb Q}
+	\newcommand{\RR}{\mathbb R}
+	\newcommand{\TT}{\mathbb T}
+	\newcommand{\VV}{\mathbb V}
+	\newcommand{\ZZ}{\mathbb Z}
+
+	%Misc
+	\newcommand{\defeq}{\vcentcolon=}
+	\newcommand{\eqdef}{=\vcentcolon}
+	
+	%Number Theory
+	\newcommand{\leg}[2]{\left(\frac{#1}{#2}\right)}
+	\newcommand{\divides}{ \ | \ }
+	\newcommand{\modulo}[3][4]{#2 \ \equiv \ #3 \ (#1)}	
+
+	
+%Commands%
+
+%--------
+
+%Theorem Environments%
+
+	
+%Theorem Environments%
