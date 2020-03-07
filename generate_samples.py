@@ -10,11 +10,7 @@ import json
 #to generate up to modulo 1000
 
 def generate_samples(max_n):
-<<<<<<< HEAD:beau_comp.py
-    L = dict()
-=======
     #x is our modulus
->>>>>>> b87fc97712817a9c3e57e3904466ccd88e5ec19c:generate_samples.py
     for x in range(3, max_n):
         self_squares = []
         #factoring to find invertible numbers
