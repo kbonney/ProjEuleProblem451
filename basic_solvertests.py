@@ -28,8 +28,11 @@ def generate_solns(max_n):
             #checks that no prime divisors of our modulus (x) divide our number y
             #then checks if y is its own inverse
             if all(X%p != 0 for p in primes.keys()) and (X*X)%x == 1:
-                D[x]=X
-                break
+                if len(primes) == 1:
+                    D[str(x) + " P"]=X
+                else:
+                    D[x]=X
+                    break
 
     return D
 #code for taking command-line arguments
