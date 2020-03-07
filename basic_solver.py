@@ -37,4 +37,6 @@ max_n = 5
 if len(sys.argv) > 1:
     max_n = int(sys.argv[1])
 
-print(json.dumps(generate_solns(max_n),indent=1))
+sols = generate_solns(max_n)
+print(json.dumps(sols,indent=1))
+print("Sum: {}".format(sum(sols.values())))
