@@ -1,10 +1,12 @@
 from sympy.ntheory import factorint
 import sys
+import json
 
 #the goal, for all given integers 3<=n<=2*10^7
 #is to calculate the largest positive number m<n-1 st m^(-1) (mod n) == m (mod n)
 
 def generate_samples(max_n):
+    L = dict()
     for x in range(3, max_n):
         self_squares = []
         primes = factorint(x)
@@ -17,4 +19,6 @@ max_n = 5
 if len(sys.argv) > 1:
     max_n = int(sys.argv[1])
 
-generate_samples(max_n)
+
+print(json.dumps(generate_samples(max_n)
+,indent=1))
