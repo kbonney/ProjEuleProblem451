@@ -18,3 +18,4 @@ So I(15)=11.
 Also I(100)=51 and I(7)=1.
 
 Find ∑ I(n) for 3≤n≤2×10^7
+teengy weengy
