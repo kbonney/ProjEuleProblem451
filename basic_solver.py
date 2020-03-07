@@ -1,6 +1,7 @@
 from sympy.ntheory import factorint
 import sys
 import json
+import time
 
 #the goal, for all given integers 3<=n<=2*10^7
 #is to calculate the largest positive number m<n-1 st m^(-1) (mod n) == m (mod n)
@@ -15,7 +16,7 @@ def generate_solns(max_n):
     D = dict()
 
     #x is our modulus
-    for x in range(3, max_n):
+    for x in range(3, max_n+1):
 
         #factoring to find invertible numbers
         primes = factorint(x)
@@ -32,6 +33,10 @@ def generate_solns(max_n):
                 break
 
     return D
+
+
+start = time.time()
+
 #code for taking command-line arguments
 max_n = 5
 if len(sys.argv) > 1:
@@ -40,3 +45,6 @@ if len(sys.argv) > 1:
 sols = generate_solns(max_n)
 print(json.dumps(sols,indent=1))
 print("Sum: {}".format(sum(sols.values())))
+
+end = time.time()
+print("Time elapsed: {}".format(end-start))
