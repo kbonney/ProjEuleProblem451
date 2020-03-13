@@ -1,0 +1,168 @@
+from sympy import sieve
+import sympy as sp
+import sys
+import json
+import multiprocessing
+from multiprocessing import Lock
+import time
+import matplotlib.pyplot as plt
+from math import sqrt
+from bisect import insort
+
+lock = Lock()
+
+####
+#Overview
+####
+#The goal here is to leverage previous solutions when finding the next solution
+#It uses the theory of finite abelian groups
+#Which is basically just fancy chinese remainder theorem
+
+def inductive_solver(max_n, primes, solutions, sum_sol, interval, offset):
+
+    local_sum = 0
+    
+    #handling base cases, n < 4
+    #offset counting for each process
+    start_val = 0
+    while(start_val*interval + offset < 4):
+        if start_val*interval + offset > 2:
+            local_sum += 1
+        start_val+=1
+        
+    #x is our n value
+    x = start_val*interval + offset
+
+    ##
+    #Beginning the loop through n values
+    ##
+    
+    #looping through all values of n
+    while x < max_n + 1:
+        #finding the smallest prime divisor
+        smallest_prime = x
+
+        upper_bound = int(sqrt(x))+1
+        for cur_prime in primes:
+            if cur_prime > upper_bound:
+                break
+            if x%cur_prime == 0:
+                smallest_prime = cur_prime
+                break
+            
+        smallest_prime_power = smallest_prime
+        while (x/smallest_prime_power)%smallest_prime == 0:
+            smallest_prime_power *= smallest_prime
+
+        #handling edge cases where we have a prime power or a power of 2
+        if smallest_prime_power == x:
+            if smallest_prime != 2:
+                solutions.update([(x,[1,x-1])])
+                local_sum += 1
+                x += interval
+                continue
+            else:
+                max_val = 1
+                cur_solutions = [1,x-1]
+                for cur_val in range(int(sqrt(x)),int((x/2))+1):
+                    if (cur_val**2)%x == 1:
+                        if (-cur_val)%x > max_val:
+                            max_val = (-cur_val)%x
+                        cur_solutions.append(cur_val)
+                        cur_solutions.append((-cur_val)%x)
+                local_sum += max_val
+                solutions.update([(x, cur_solutions)])
+                x += interval
+                continue
+                        
+        k = x/smallest_prime_power
+
+        #we have to wait until k, p^n are in our dict
+        while not (k in solutions and smallest_prime_power in solutions):
+            #print("Process {} waiting for values {} and {}...".format(offset, k, smallest_prime_power))
+            pass
+        
+        #once we've found the smallest prime divisor power, our desired number satisfies a^2 = 1 mod lp^k
+        #where lp^k = n
+        #thus it satisfies a^2=1 mod p^k
+        #and it satifies a^2=1 mod l
+        #so our solution must be modularly equivalent to solutions mod p^k and solutions mod l
+
+        #now we're just leveraging chinese remainder theorem
+        #using an algorithm to find all solutions for each pair of solutions
+        
+        cur_sols = []
+        #smaller_val = min(smallest_prime_power, k)
+        #other_val = max(smallest_prime_power, k)
+        max_val = 1
+        gcd = sp.gcdex(smallest_prime_power,k)
+        for a in solutions[smallest_prime_power]:
+            for b in solutions[k]:
+                next_sol = ((gcd[0]*smallest_prime_power*(b)) + (gcd[1]*k*(a)))%x
+                cur_sols.append(next_sol)
+                if next_sol > max_val and next_sol < x-1:
+                    max_val = next_sol
+        #print(cur_sols)
+                        
+        local_sum += max_val
+        #saving our solutions
+        solutions.update([(x, cur_sols)])
+
+        x += interval
+
+    lock.acquire()
+    sum_sol.value += local_sum
+    lock.release()
+        
+    return
+
+
+##
+#This is the interface where we handle the user commnds
+##
+
+max_n = 5
+
+#We expect a two arguments: max_n and #processes 
+if len(sys.argv) == 3:
+    max_n = int(sys.argv[1])
+    processes = int(sys.argv[2])
+    
+    ##
+    #Beginning the multiprocessing
+    ##
+    
+    manager = multiprocessing.Manager()
+    #the process manager holds shared variables
+    
+    #dictionary for holding previous solution sets
+    sols = manager.dict([(2, [1]),(3, [1,2])])
+    #sum of max involutions
+    sum_sol = manager.Value('i', 0)
+    primes = manager.list()
+    jobs = []
+
+
+    #prime sieve for breaking apart solutions
+    print("Calculating all necessary primes...")
+    primes = [i for i in sieve.primerange(2,int(sqrt(max_n))+1)]
+    print("Solving...")
+    
+    #setting up each process with their own values of n
+    #each of the k processes only looks at values of n where n+cur=0(mod k), 0<cur<k
+
+    #initialize the rest of the processes in a loop
+    for cur in range(0, processes):
+        cur_process = multiprocessing.Process(target=inductive_solver, args=[max_n, primes, sols, sum_sol, processes, cur])
+        cur_process.start()
+        jobs.append(cur_process)
+
+    #wait for our processes to terminate
+    for cur_process in jobs:
+        cur_process.join()
+
+    #for sol in sols.items():
+    #    print("n value: {} Self-squares: {}".format(sol[0], sol[1]))
+    
+    #and finally, we have our solution!
+    print("sum: {}".format(sum_sol.value))
